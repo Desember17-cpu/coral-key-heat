@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CORAL KEY HEAT — a Coral Keys crime saga</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}html,body{width:100%;height:100%;overflow:hidden;background:#1a0f2e;font-family:system-ui,'Segoe UI',sans-serif;color:#fff}
+canvas.webgl{position:fixed;inset:0;display:block}
+.hud{position:fixed;z-index:5;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+.panel{background:rgba(10,16,28,.72);border:1px solid rgba(255,210,62,.45);border-radius:10px;padding:8px 10px;backdrop-filter:blur(3px)}
+#mission-panel{top:12px;left:12px;width:320px}
+.mp-title{font-weight:800;color:#ffd23e;font-size:15px}.mp-stage{font-size:13px;margin-top:2px}.mp-next{font-size:12px;color:#9fe8ff;margin-top:2px}.mp-dist{font-size:12px;color:#ffb36b}
+#dispatch{top:150px;left:12px;width:320px;font-size:12px}
+.dp-head{font-weight:800;color:#7fb2ff}.dp-row{display:flex;gap:6px;justify-content:space-between}.dp-row span{color:#ffd23e}.dp-row i{color:#9fe8ff;font-style:normal}
+.dp-feed{margin-top:5px;color:#cfe8ff;border-top:1px solid rgba(255,255,255,.2);padding-top:4px}
+#topright{top:12px;right:12px;text-align:right;width:330px;background:none;border:none}
+#clock{font-size:14px;font-weight:700}#cash{font-size:34px;font-weight:900;color:#7dff8a}
+#wanted{font-size:24px;color:#ffd23e}#wanted .dim{color:rgba(255,255,255,.25)}.wstate{font-size:12px;color:#ff6b6b;font-weight:800;letter-spacing:2px}
+#health{font-size:14px;font-weight:700}.armor{color:#7fb2ff}.hbar{height:7px;background:rgba(255,255,255,.2);border-radius:4px;margin-top:3px}.hbar i{display:block;height:100%;background:#ff4757;border-radius:4px}
+#wheel{display:flex;gap:5px;justify-content:flex-end;margin-top:7px;flex-wrap:wrap}
+.wslot{width:74px;background:rgba(10,16,28,.75);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:4px;text-align:center;font-size:10px}
+.wslot.sel{border-color:#ffd23e;box-shadow:0 0 8px #ffd23e}.wslot.locked{opacity:.55}.wslot span{font-size:16px;display:block}.wslot b{display:block;font-size:10px}.wslot i{color:#9fe8ff;font-style:normal}
+#bottomleft{left:12px;bottom:12px;width:230px;background:none;border:none}
+#minimap{border-radius:50%;border:3px solid rgba(255,210,62,.7);display:block}
+#district{font-weight:800;margin-top:5px;font-size:14px}#respect{font-size:11px;margin-top:3px;background:rgba(10,16,28,.72);border-radius:8px;padding:5px 7px}
+.rbar{height:7px;background:rgba(255,255,255,.2);border-radius:4px}.rbar i{display:block;height:100%;background:linear-gradient(90deg,#ff8c42,#ffd23e);border-radius:4px}
+#bottomright{right:12px;bottom:12px;text-align:right;width:250px}
+#radio{font-size:12px;margin-bottom:6px}#vehicle .speed{font-size:44px;font-weight:900;color:#ffd23e;line-height:1}
+#crew{right:12px;bottom:190px;width:250px;display:flex;flex-direction:column;gap:5px}
+.crew{display:flex;gap:7px;align-items:center;background:rgba(10,16,28,.72);border-radius:9px;padding:5px 7px;font-size:11px;border:1px solid rgba(255,255,255,.25)}
+.crew.oncd{opacity:.55}.crew .avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:#10222e;flex:none}
+#shells{top:12px;left:50%;transform:translateX(-50%);font-size:20px;font-weight:900;background:rgba(10,16,28,.7);padding:4px 14px;border-radius:20px}
+#prompt{bottom:150px;left:50%;transform:translateX(-50%);font-size:19px;font-weight:800;color:#ffd23e;background:rgba(10,16,28,.8);padding:7px 18px;border-radius:10px;transition:opacity .2s}
+#dialogue{bottom:18px;left:50%;transform:translateX(-50%);width:520px;display:flex;gap:10px;align-items:center}
+#dlg-avatar{width:56px;height:56px;border-radius:50%;background:#ffb36b;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#40260a;flex:none;border:2px solid #ffd23e}
+#dlg-name{font-weight:900;color:#ffb36b}#dlg-role{font-size:11px;color:#9fe8ff}#dlg-line{font-size:14px}
+#banner{top:110px;left:50%;transform:translateX(-50%);text-align:center;background:none;border:none}
+.b-title{font-size:46px;font-weight:900;letter-spacing:4px;color:#ffd23e;text-shadow:0 0 22px rgba(255,160,40,.8)}
+.b-sub{font-size:15px;font-weight:700}
+#stunt{top:230px;left:50%;transform:translateX(-50%);text-align:center;font-size:19px;font-weight:900;color:#7dffec;background:rgba(10,16,28,.75);padding:8px 18px;border-radius:12px}
+#muzzle{top:46%;left:52%;font-size:44px;transition:opacity .05s}
+.dmgnum{position:fixed;z-index:6;color:#ffdf5e;font-weight:900;font-size:22px;text-shadow:0 0 6px #f00;pointer-events:none;animation:rise .8s forwards}
+@keyframes rise{to{transform:translateY(-46px);opacity:0}}
+.screen{position:fixed;inset:0;z-index:20;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(8,10,24,.88);overflow:auto;padding:20px}
+#title{display:flex;background:linear-gradient(180deg,rgba(60,20,80,.55),rgba(8,10,24,.92))}
+#title h1{font-size:84px;font-weight:900;letter-spacing:3px;background:linear-gradient(90deg,#ffd23e,#ff6b81,#c56cf0);-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center;line-height:.95}
+#title .tag{font-size:19px;color:#ffe9b0;margin:10px 0 4px;text-align:center}
+#title .sub{font-size:13px;color:#9fe8ff;margin-bottom:16px;text-align:center}
+.slot{pointer-events:auto;display:block;width:420px;margin:5px;padding:10px 14px;background:rgba(255,255,255,.08);border:1px solid #ffd23e;border-radius:10px;color:#fff;font-size:14px;text-align:left;cursor:pointer}
+.slot span{color:#9fe8ff;font-size:12px}
+#startbtn{pointer-events:auto;margin-top:12px;font-size:19px;font-weight:900;padding:11px 34px;background:linear-gradient(90deg,#ff8c42,#ff6b81);border:none;border-radius:12px;color:#fff;cursor:pointer}
+#mapscreen h2,#statsscreen h2{color:#ffd23e;letter-spacing:3px;margin-bottom:10px}
+#bigmap{border-radius:14px;border:2px solid #ffd23e}
+#map-standings{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+.stand{width:180px;background:rgba(255,255,255,.07);border-radius:9px;padding:7px 9px;font-size:12px}
+.legend{margin-top:10px;font-size:13px;color:#cfe8ff}
+#stats-body{width:640px;max-width:92vw;font-size:14px}.bigpct{font-size:52px;font-weight:900;color:#7dff8a}
+#stats-body h3{color:#ffd23e;margin:12px 0 4px}.rank.got{color:#7dff8a}.next-unlock{margin-top:8px;font-weight:800;color:#ffb36b}
+#autopilot-result{position:fixed;bottom:2px;left:2px;z-index:1;font-size:10px;color:rgba(255,255,255,.35)}
+</style></head><body>
+<div id="mission-panel" class="hud panel"></div>
+<div id="dispatch" class="hud panel"></div>
+<div id="topright" class="hud panel"><div id="clock"></div><div id="cash"></div><div id="wanted"></div><div id="health"></div><div id="wheel"></div></div>
+<div id="bottomleft" class="hud panel"><canvas id="minimap" width="190" height="190"></canvas><div id="district"></div><div id="respect"></div></div>
+<div id="bottomright" class="hud panel"><div id="radio"></div><div id="vehicle"></div></div>
+<div id="crew" class="hud"></div>
+<div id="shells" class="hud"></div>
+<div id="prompt" class="hud"></div>
+<div id="dialogue" class="hud panel"><div id="dlg-avatar">I</div><div><div id="dlg-name"></div><div id="dlg-role"></div><div id="dlg-line"></div></div></div>
+<div id="banner" class="hud panel"></div>
+<div id="stunt" class="hud"></div>
+<div id="muzzle" class="hud">💥</div>
+<div id="dmg-layer"></div>
+<div id="title" class="screen">
+  <h1>CORAL KEY<br>HEAT</h1>
+  <div class="tag">Five keys. One courier. Every bridge is a getaway.</div>
+  <div class="sub">Run packages across the Coral Keys for Captain Ivo Marchetti — outdrive the Key Patrol, fly the stunt ramps, and hunt all 24 conch shells.<br>Controls: WASD drive/walk • E steal/enter • Click shoot • Z/X/C crew • M map • Tab stats • R radio</div>
+  <div id="slots-title"></div>
+  <button id="startbtn">▶ START — KEY ARENA</button>
+</div>
+<div id="mapscreen" class="screen"><h2>🗺 THE CORAL KEYS</h2><canvas id="bigmap" width="660" height="480"></canvas><div id="map-standings"></div><div class="legend">Legend: 🟡 GPS objective • 🔵 Key Patrol • 🔴 HERON AIR • 🌸 conch shells • ⚪ traffic • dashed line = GPS route</div></div>
+<div id="statsscreen" class="screen"><h2>📊 CAREER — CORAL KEY HEAT</h2><div id="stats-body"></div></div>
+<div id="autopilot-result"></div>
+<script>window.__errors=[];addEventListener('error',e=>{window.__errors.push(String(e.message||e.error))});</script>
+<script src="vendor/three.min.js"></script>
+<script type="module" src="src/main.js"></script>
+</body></html>
