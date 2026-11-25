@@ -1,8 +1,8 @@
 # CORAL KEY HEAT
 
-[![badge](https://make.fun/api/badge/Desember17-cpu/gta6)](https://make.fun/bounty/gta6-01)
-[![badge](https://make.fun/api/badge/Desember17-cpu/gta6)](https://make.fun/bounty/gta6-01)
-[![badge](https://make.fun/api/badge/Desember17-cpu/gta6)](https://make.fun/bounty/gta6-01)
+[![make.fun · gta6-01](https://make.fun/badge/gta6-01.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+[![rank](https://make.fun/badge/gta6-01/Desember17-cpu/coral-key-heat/rank.svg)](https://make.fun/bounty/gta6-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
+[![reward](https://make.fun/badge/gta6-01/Desember17-cpu/coral-key-heat/reward.svg)](https://make.fun/bounty/gta6-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-01)
 
 **Pitch:** An archipelago of five coral keys joined by long bridges over turquoise water. You are a courier-turned-smuggler running packages between islands for dispatcher Captain Ivo Marchetti while the Key Patrol closes in. Signature systems: bridge chases against named patrol units, 8 stunt jumps with printed air-time bonuses, and 24 collectible conch shells scattered across Key Arena, Palmetto Key, Fort Cayo, Heron Key and The Shallows.
 
